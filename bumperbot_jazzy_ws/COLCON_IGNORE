@@ -1,0 +1,2 @@
+# Prevent duplicate packages when building the parent Humble workspace.
+# Build this workspace with: colcon build --base-paths src

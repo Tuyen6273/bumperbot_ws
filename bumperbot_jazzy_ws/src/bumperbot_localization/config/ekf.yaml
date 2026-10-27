@@ -1,0 +1,138 @@
+# Tên này phải khớp với name của Node ekf_node trong launch file.
+ekf_filter_node:
+  ros__parameters:
+
+    # EKF xuất bản trạng thái 30 lần mỗi giây.
+    frequency: 30.0
+
+    # Robot chỉ chạy trên mặt phẳng 2D:
+    # EKF sẽ bỏ qua z, roll và pitch.
+    two_d_mode: true
+
+    # Cho phép EKF publish transform TF.
+    publish_tf: true
+
+    # Hệ tọa độ toàn cục (thường dùng khi có GPS / AMCL).
+    map_frame: map
+
+    # Hệ tọa độ odometry từ encoder bánh xe.
+    odom_frame: odom
+
+    # Frame base_link mà EKF sẽ publish.
+    # Khóa học tạo frame riêng để tránh ghi đè base_footprint gốc.
+    base_link_frame: base_footprint_ekf
+
+    # Frame thế giới mà EKF dùng để xuất kết quả.
+    # "odom" nghĩa là local odometry, không dùng định vị toàn cục.
+    world_frame: odom
+
+
+    # ==================== NGUỒN ODOMETRY ====================
+
+    # Topic odometry lấy từ bumperbot_controller.
+    odom0: bumperbot_controller/odom_noisy
+
+    # Chọn dữ liệu nào từ odom0 sẽ được EKF fusion.
+    #
+    # Thứ tự 15 phần tử:
+    # [x, y, z,
+    #  roll, pitch, yaw,
+    #  vx, vy, vz,
+    #  vroll, vpitch, vyaw,
+    #  ax, ay, az]
+    #
+    # true ở đây nghĩa là dùng:
+    # - yaw: góc quay quanh trục z
+    # - vx: vận tốc tiến theo trục x
+    odom0_config: [
+      false, false, false,
+      false, false, true,
+      true,  false, false,
+      false, false, false,
+      false, false, false
+    ]
+
+    # Dùng thay đổi giữa các lần đo odometry,
+    # thay vì coi giá trị odom là vị trí tuyệt đối.
+    odom0_differential: true
+
+
+    # ======================= NGUỒN IMU =======================
+
+    # Topic IMU đã được chuẩn bị cho EKF.
+    imu0: imu_ekf
+
+    # Chọn trường dữ liệu IMU để fusion.
+    #
+    # true ở đây nghĩa là dùng:
+    # - yaw: góc quay z
+    # - vyaw: vận tốc góc quanh trục z
+    # - ax: gia tốc theo trục x
+    imu0_config: [
+      false, false, false,
+      false, false, true,
+      false, false, false,
+      false, false, true,
+      true,  false, false
+    ]
+
+    # Dùng chênh lệch orientation IMU giữa các lần đo.
+    # Có thể để false nếu IMU đã ổn định và bạn muốn dùng yaw tuyệt đối.
+    imu0_differential: true
+
+
+    # =============== PROCESS NOISE COVARIANCE ================
+
+    # Ma trận 15 x 15 (225 phần tử) biểu diễn độ nhiễu
+    # trong mô hình dự đoán chuyển động của EKF.
+    #
+    # Các giá trị trên đường chéo tương ứng lần lượt:
+    # x, y, z, roll, pitch, yaw, vx, vy, vz,
+    # vroll, vpitch, vyaw, ax, ay, az.
+    #
+    # Giá trị lớn hơn => EKF ít tin vào dự đoán nội bộ hơn.
+    # Các số 0 ngoài đường chéo nghĩa là giả định các trạng thái
+    # không tương quan trực tiếp với nhau.
+    process_noise_covariance: [
+      0.05, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.05, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.06, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.03, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.03, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.06, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.025, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.025, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.04, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0,
+      0.0,  0.0,  0.0,  0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.015
+    ]
+
+
+    # ============== INITIAL ESTIMATE COVARIANCE ==============
+
+    # Ma trận 15 x 15 cho biết EKF "tự tin thế nào" tại lúc khởi động.
+    #
+    # 1e-9 rất nhỏ => EKF khởi động với trạng thái gần như chắc chắn.
+    # Đây là giá trị trong khóa học; khi chạy robot thật, đôi khi nên
+    # tăng các giá trị này nếu vị trí/góc ban đầu không đáng tin cậy.
+    initial_estimate_covariance: [
+      1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,  0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9, 0.0,
+      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1e-9
+    ]

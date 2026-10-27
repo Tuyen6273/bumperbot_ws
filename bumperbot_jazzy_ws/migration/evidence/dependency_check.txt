@@ -1,0 +1,4 @@
+Evaluated package.xml conditions for ROS_DISTRO=jazzy, ROS_VERSION=2, ROS_PYTHON_VERSION=3.
+Compared dependency names with official rosdep base/python and Jazzy release distribution data.
+Unknown applicable dependency keys: 0.
+This is not an ARM64 apt install test.

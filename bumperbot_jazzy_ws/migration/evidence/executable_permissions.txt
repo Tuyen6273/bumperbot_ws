@@ -1,0 +1,4 @@
+Correction after Pi launch report: 3 source Python programs lacked executable bits.
+Changed file modes only; file contents/algorithms unchanged.
+All 7 CMake install(PROGRAMS) scripts can be resolved with executable discovery through symlinks.
+Archive executable permission bits are checked before delivery.

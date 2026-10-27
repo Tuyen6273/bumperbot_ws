@@ -1,0 +1,17 @@
+# Thư mục build và log của colcon/ROS
+build/
+install/
+log/
+artifacts/
+symlink_install_manifest.txt
+
+# Python cache & compiled files
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Cấu hình IDE / Editor
+.vscode/
+.idea/
+*.swp
+*~

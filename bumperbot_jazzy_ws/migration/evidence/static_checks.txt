@@ -1,0 +1,4 @@
+{'XML/Xacro/SDF/world/config': 180, 'Python': 51, 'YAML': 5}
+URDF is_sim=false: joints, plugin and mesh paths PASS
+URDF is_sim=true: joints, plugin and mesh paths PASS
+Static checks PASS; this does not verify Jazzy runtime or physics.

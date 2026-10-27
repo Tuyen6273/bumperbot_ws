@@ -1,0 +1,61 @@
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'model':
+        Truyền đường dẫn file urdf vào đây
+        (default: '/tmp/bumperbot_jazzy_validation/install/bumperbot_description/share/bumperbot_description/urdf/bumperbot.urdf.xacro')
+
+    'world_name':
+        Tên file world
+        (default: 'empty')
+
+    'gz_args':
+        Arguments to be passed to Gazebo Sim
+        (default: '')
+
+    'gz_version':
+        Gazebo Sim's major version
+        (default: '6')
+
+    'ign_args':
+        Deprecated: Arguments to be passed to Gazebo Sim
+        (default: '')
+
+    'ign_version':
+        Deprecated: Gazebo Sim's major version
+        (default: '')
+
+    'debugger':
+        Run in Debugger
+        (default: 'false')
+
+    'debug_env':
+        Debug environment variables
+        (default: 'false')
+
+    'on_exit_shutdown':
+        Shutdown on gz-sim exit
+        (default: 'false')
+
+    'use_python':
+        no description given
+        (default: 'True')
+
+    'wheel_radius':
+        no description given
+        (default: '0.034')
+
+    'wheel_separation':
+        no description given
+        (default: '0.2565')
+
+    'use_simple_controller':
+        no description given
+        (default: 'False')
+
+    'wheel_radius_error':
+        no description given
+        (default: '0.005')
+
+    'wheel_separation_error':
+        no description given
+        (default: '0.02')

@@ -1,0 +1,352 @@
+--- a/src/bumberbot_py_examples/launch/controller_joystick.launch.py
++++ b/src/bumberbot_py_examples/launch/controller_joystick.launch.py
+@@ -1,3 +1,5 @@
++import os
++from ament_index_python.packages import get_package_share_directory
+ from launch import LaunchDescription
+ from launch_ros.actions import Node
+ from launch.actions import DeclareLaunchArgument, GroupAction
+@@ -5,6 +7,9 @@
+ from launch.conditions import IfCondition, UnlessCondition
+ 
+ def generate_launch_description():
++    controller_config = os.path.join(
++        get_package_share_directory("bumperbot_controller"),
++        "config", "bumperbot_controllers.yaml")
+ 
+     wheel_separation_arg = DeclareLaunchArgument(
+         "wheel_separation",
+@@ -42,7 +47,8 @@
+         arguments=[
+             "joint_state_broadcaster",
+             "--controller-manager",
+-            "/controller_manager"
++            "/controller_manager",
++            "--param-file", controller_config
+         ]
+     )
+ 
+@@ -52,7 +58,8 @@
+         arguments=[
+             "bumperbot_controller",
+             "--controller-manager",
+-            "/controller_manager"
++            "/controller_manager",
++            "--param-file", controller_config
+         ],
+     )
+ 
+--- a/src/bumberbot_py_examples/package.xml
++++ b/src/bumberbot_py_examples/package.xml
+@@ -12,7 +12,7 @@
+   <exec_depend>geometry_msgs</exec_depend>
+   <exec_depend>rcl_interfaces</exec_depend>
+   <exec_depend>turtlesim</exec_depend>
+-  <exec_depend>pygame</exec_depend>
++  <exec_depend>python3-pygame</exec_depend>
+   <exec_depend>tf2_ros</exec_depend>
+   <exec_depend>bumperbot_msgs</exec_depend>
+   <exec_depend>tf_transformations</exec_depend>
+@@ -22,6 +22,12 @@
+   <test_depend>ament_pep257</test_depend>
+   <test_depend>python3-pytest</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <exec_depend>controller_manager</exec_depend>
++  <exec_depend>bumperbot_controller</exec_depend>
++
+   <export>
+     <build_type>ament_python</build_type>
+   </export>
+--- a/src/bumperbot_bringup/launch/real_robot.launch.py
++++ b/src/bumperbot_bringup/launch/real_robot.launch.py
+@@ -29,14 +29,9 @@
+                          'launch', 'joystick_teleop.launch.py')
+     )
+ 
+-    imu_node = Node(
+-        package='bumperbot_firmware',
+-        executable='Mpu6050.py'
+-    )
+ 
+     return LaunchDescription([
+         hardware,
+         controller,
+         joystick,
+-        imu_node,
+     ])
+\ No newline at end of file
+--- a/src/bumperbot_bringup/launch/simulated_robot.launch.py
++++ b/src/bumperbot_bringup/launch/simulated_robot.launch.py
+@@ -1,4 +1,5 @@
+ from launch import LaunchDescription
++from launch_ros.actions import SetParameter
+ import os
+ from ament_index_python.packages import get_package_share_directory
+ from launch import LaunchDescription
+@@ -28,6 +29,7 @@
+     )
+ 
+     return LaunchDescription([
++        SetParameter(name="use_sim_time", value=True),
+         gazebo,
+         controller,
+         joystick,
+--- a/src/bumperbot_bringup/package.xml
++++ b/src/bumperbot_bringup/package.xml
+@@ -12,6 +12,13 @@
+   <test_depend>ament_lint_auto</test_depend>
+   <test_depend>ament_lint_common</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <exec_depend>bumperbot_description</exec_depend>
++  <exec_depend>bumperbot_controller</exec_depend>
++  <exec_depend>bumperbot_firmware</exec_depend>
++
+   <export>
+     <build_type>ament_cmake</build_type>
+   </export>
+--- a/src/bumperbot_controller/launch/controller.launch.py
++++ b/src/bumperbot_controller/launch/controller.launch.py
+@@ -1,3 +1,5 @@
++import os
++from ament_index_python.packages import get_package_share_directory
+ from launch import LaunchDescription
+ from launch_ros.actions import Node
+ from launch.actions import DeclareLaunchArgument, GroupAction, OpaqueFunction
+@@ -21,6 +23,9 @@
+     return [noisy_controller_py]
+ 
+ def generate_launch_description():
++    controller_config = os.path.join(
++        get_package_share_directory("bumperbot_controller"),
++        "config", "bumperbot_controllers.yaml")
+ 
+     use_python_arg = DeclareLaunchArgument(
+         "use_python",
+@@ -63,7 +68,8 @@
+         arguments=[
+             "joint_state_broadcaster",
+             "--controller-manager",
+-            "/controller_manager"
++            "/controller_manager",
++            "--param-file", controller_config
+         ]
+     )
+ 
+@@ -73,7 +79,8 @@
+         arguments=[
+             "bumperbot_controller",
+             "--controller-manager",
+-            "/controller_manager"
++            "/controller_manager",
++            "--param-file", controller_config
+         ],
+         condition = UnlessCondition(use_simple_controller) 
+     )
+@@ -86,7 +93,8 @@
+                 arguments=[
+                     "simple_velocity_controller",
+                     "--controller-manager",
+-                    "/controller_manager"
++                    "/controller_manager",
++                    "--param-file", controller_config
+                 ],
+             ),
+             
+--- a/src/bumperbot_controller/package.xml
++++ b/src/bumperbot_controller/package.xml
+@@ -25,6 +25,13 @@
+   <test_depend>ament_lint_auto</test_depend>
+   <test_depend>ament_lint_common</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <exec_depend>joint_state_broadcaster</exec_depend>
++  <exec_depend>diff_drive_controller</exec_depend>
++  <exec_depend>velocity_controllers</exec_depend>
++
+   <export>
+     <build_type>ament_cmake</build_type>
+   </export>
+--- a/src/bumperbot_description/launch/gazebo.launch.py
++++ b/src/bumperbot_description/launch/gazebo.launch.py
+@@ -42,11 +42,11 @@
+     robot_state_publisher = Node(
+         package="robot_state_publisher",
+         executable="robot_state_publisher",
+-        parameters=[{"robot_description": robot_description}]
++        parameters=[{"robot_description": robot_description, "use_sim_time": True}]
+     )
+ 
+     gazebo_resource_path = SetEnvironmentVariable(
+-        name="GZ SIM RESOURCE PATH",
++        name="GZ_SIM_RESOURCE_PATH",
+         value= model_path
+     )
+ 
+@@ -77,7 +77,8 @@
+         package="ros_gz_bridge",
+         executable="parameter_bridge",
+         arguments=[
+-            "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU"
++            "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
++            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"
+         ],
+         remappings=[
+             ("/imu", "/imu/out")
+--- a/src/bumperbot_description/package.xml
++++ b/src/bumperbot_description/package.xml
+@@ -13,7 +13,7 @@
+   <exec_depend>joint_state_publisher_gui</exec_depend>
+   <exec_depend>rviz2</exec_depend>
+   <exec_depend>ros_gz_sim</exec_depend>
+-  <exec_depend>ros_gz_bridges</exec_depend>
++  <exec_depend>ros_gz_bridge</exec_depend>
+   <exec_depend>xacro</exec_depend>
+   <exec_depend>urdf</exec_depend>
+   <exec_depend condition="$ROS_DISTRO >= iron">gz_ros2_control</exec_depend>
+@@ -22,6 +22,13 @@
+   <test_depend>ament_lint_auto</test_depend>
+   <test_depend>ament_lint_common</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <exec_depend>robot_state_publisher</exec_depend>
++  <exec_depend>bumperbot_controller</exec_depend>
++  <exec_depend>rosgraph_msgs</exec_depend>
++
+   <export>
+     <build_type>ament_cmake</build_type>
+   </export>
+--- a/src/bumperbot_description/urdf/bumperbot_gazebo.urdf.xacro
++++ b/src/bumperbot_description/urdf/bumperbot_gazebo.urdf.xacro
+@@ -56,7 +56,7 @@
+ 
+         <xacro:unless value="$(arg is_ignition)">
+             <plugin
+-                filename = "gz_ros2_control_system"
++                filename = "gz_ros2_control-system"
+                 name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                 <parameters>$(find bumperbot_controller)/config/bumperbot_controllers.yaml</parameters>
+             </plugin>
+--- a/src/bumperbot_firmware/CMakeLists.txt
++++ b/src/bumperbot_firmware/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ pkg_check_modules(SERIAL REQUIRED libserial)
+ 
+ add_library(${PROJECT_NAME} SHARED 
+-  src/bumperbot_interface.cpp
++  include/bumperbot_firmware/bumperbot_interface.cpp
+ )
+ 
+ target_include_directories(${PROJECT_NAME} PRIVATE
+--- a/src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp
++++ b/src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp
+@@ -1,5 +1,8 @@
+ #include "bumperbot_firmware/bumperbot_interface.hpp"
+ #include <hardware_interface/types/hardware_interface_type_values.hpp>
++#include <cmath>
++#include <iomanip>
++#include <sstream>
+ 
+ namespace bumperbot_firmware
+ {
+@@ -43,9 +46,9 @@
+         RCLCPP_FATAL(rclcpp::get_logger("BumperbotInterface"), "No serial port provided! Aborting");
+         return CallbackReturn::FAILURE;
+     }
+-    velocity_commands_.reserve(info_.joints.size());
+-    position_states_.reserve(info_.joints.size());
+-    velocity_states_.reserve(info_.joints.size());
++    velocity_commands_.resize(info_.joints.size(), 0.0);
++    position_states_.resize(info_.joints.size(), 0.0);
++    velocity_states_.resize(info_.joints.size(), 0.0);
+     Last_run_ = rclcpp::Clock().now();
+ 
+     return CallbackReturn::SUCCESS;
+@@ -158,6 +161,7 @@
+         }
+         
+     }
++    return CallbackReturn::SUCCESS;
+ }
+ hardware_interface::return_type BumperbotInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period)
+ {
+--- a/src/bumperbot_firmware/launch/hardware_interface.launch.py
++++ b/src/bumperbot_firmware/launch/hardware_interface.launch.py
+@@ -29,9 +29,10 @@
+     controller_manager = Node(
+         package="controller_manager",
+         executable="ros2_control_node",
+-        parameters=[{"robot_description": robot_description, "use_sim_time": False},
+-                    os.path.join(get_package_share_directory("bumperbot_controller"),
+-                                  "config", "bumperbot_controllers.yaml")],
++        parameters=[os.path.join(get_package_share_directory("bumperbot_controller"),
++                                  "config", "bumperbot_controllers.yaml"),
++                    {"use_sim_time": False}],
++        remappings=[("robot_description", "/robot_description")],
+     )
+ 
+     imu_driver_node = Node(
+--- a/src/bumperbot_firmware/package.xml
++++ b/src/bumperbot_firmware/package.xml
+@@ -25,6 +25,17 @@
+   <test_depend>ament_lint_auto</test_depend>
+   <test_depend>ament_lint_common</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <build_depend>pkg-config</build_depend>
++  <exec_depend>std_msgs</exec_depend>
++  <exec_depend>controller_manager</exec_depend>
++  <exec_depend>bumperbot_description</exec_depend>
++  <exec_depend>bumperbot_controller</exec_depend>
++  <exec_depend>robot_state_publisher</exec_depend>
++  <exec_depend>xacro</exec_depend>
++
+   <export>
+     <build_type>ament_cmake</build_type>
+   </export>
+--- a/src/bumperbot_localization/package.xml
++++ b/src/bumperbot_localization/package.xml
+@@ -19,6 +19,11 @@
+   <test_depend>ament_lint_auto</test_depend>
+   <test_depend>ament_lint_common</test_depend>
+ 
++  <exec_depend>launch</exec_depend>
++  <exec_depend>launch_ros</exec_depend>
++  <exec_depend>ament_index_python</exec_depend>
++  <exec_depend>tf2_ros</exec_depend>
++
+   <export>
+     <build_type>ament_cmake</build_type>
+   </export>
+--- a/src/bumperbot_msgs/package.xml
++++ b/src/bumperbot_msgs/package.xml
+@@ -10,7 +10,7 @@
+   <buildtool_depend>ament_cmake</buildtool_depend>
+ 
+   <depend>std_msgs</depend>
+-  <depend>geometry_msg</depend>
++  <depend>geometry_msgs</depend>
+   <build_depend>rosidl_default_generators</build_depend>
+ 
+   <exec_depend>rosidl_default_runtime</exec_depend>
+--- a/src/bumperbot_serial/package.xml
++++ b/src/bumperbot_serial/package.xml
+@@ -5,7 +5,6 @@
+   <description>Standalone serial motor test driver without ros2_control.</description>
+   <maintainer email="tuyen@todo.todo">tuyen</maintainer>
+   <license>Apache-2.0</license>
+-  <buildtool_depend>ament_python</buildtool_depend>
+   <exec_depend>rclpy</exec_depend>
+   <exec_depend>geometry_msgs</exec_depend>
+   <exec_depend>std_msgs</exec_depend>

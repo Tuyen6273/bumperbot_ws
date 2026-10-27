@@ -1,0 +1,4 @@
+ROS 2 Humble / Ubuntu 22.04.5 / x86_64
+Final colcon build: 9 packages finished, exit code 0.
+CMake BUILD_TESTING=OFF. bumperbot_firmware: unused parameter warnings only.
+See VALIDATION.md for the scope and limits of this result.

@@ -1,0 +1,168 @@
+<link name="wheel_right_link">
+        <inertial>
+            <origin xyz="0 -0.014 0" rpy="0 0 0"/>
+            <mass value="0.0530086090966721"/>
+            <inertia ixx="1.88176298336665E-05" ixy="-4.8444933029987E-10" ixz="1.88163708851143E-08" iyy="3.11510738647764E-05" iyz="-6.93560663069607E-11" izz="1.8801969558182E-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename = "package://bumperbot_description/meshes/wheel_68mm.STL" scale = "0.001 0.001 0.001"/>
+            </geometry>
+
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+
+        <collision>
+            <origin xyz="0 -0.015 0" rpy="1.57 0 0"/>
+            <geometry>
+                <sphere radius = '0.033'/>
+            </geometry>
+
+        </collision>
+    </link>
+
+    <joint name="wheel_right_base_joint" type = "continuous">
+        <parent link = "base_link"/>
+        <child link = "wheel_right_link"/>
+        <axis xyz ="0 1 0" />
+        <origin rpy="0 0 0" xyz="0 -0.12825 0"/>
+    </joint>
+    <!--______________________________________________________________________________________________-->
+    <!--Khai bao khớp và link cho bánh xe trái-->
+    <link name="wheel_left_link">
+        <inertial>
+            <origin xyz="0 -0.014 0" rpy="0 0 0"/>
+            <mass value="0.0530086090966721"/>
+            <inertia ixx="1.88176298336665E-05" ixy="-4.8444933029987E-10" ixz="1.88163708851143E-08" iyy="3.11510738647764E-05" iyz="-6.93560663069607E-11" izz="1.8801969558182E-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="-1.57 0 0"/>
+            <geometry>
+                <mesh filename = "package://bumperbot_description/meshes/wheel_68mm.STL" scale = "0.001 0.001 0.001"/>
+            </geometry>
+
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0.015 0" rpy="-1.57 0 0"/>
+            <geometry>
+                <sphere radius = '0.033'/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wheel_left_base_joint" type = "continuous">
+        <parent link = "base_link"/>
+        <child link = "wheel_left_link"/>
+        <axis xyz ="0 1 0" />
+        <origin rpy="0 0 0" xyz="0 0.07 0"/>
+    </joint>
+    <!--______________________________________________________________________________________________-->
+    <!--Khai bao khớp và link cho bánh xe trượt-->
+    <link name="caster_front_link">
+        <inertial>
+            <origin xyz="3.89968128948481E-07 2.40073004698083E-07 0.00219173397061506" rpy="0 0 0"/>
+            <mass value="1.44379265037903E-06"/>
+            <inertia ixx="7.23075276010246E-11" ixy="-6.10956883467859E-16" ixz="2.22849693525031E-15" iyy="3.8713793085917E-11" iyz="2.93909858781952E-15" izz="1.00967486676306E-10"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename = "package://bumperbot_description/meshes/banh_mat_trau_hoan_chinh.STL" scale = "0.001 0.001 0.001"/>
+            </geometry>
+
+            <material name="green">
+                <color rgba="0 1 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <sphere radius="0.005"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="caster_front_base_joint" type = "fixed">
+        <parent link = "base_link"/>
+        <child link = "caster_front_link"/>
+        <origin rpy="0 0 0" xyz="0.04755 0 -0.0275"/>
+    </joint>
+    <!--______________________________________________________________________________________________-->
+    <!--Khai bao khớp và link cho bánh xe trượt-->
+    <link name="caster_rear_link">
+        <inertial>
+            <origin xyz="3.89968128948481E-07 2.40073004698083E-07 0.00219173397061506" rpy="0 0 0"/>
+            <mass value="1.44379265037903E-06"/>
+            <inertia ixx="7.23075276010246E-11" ixy="-6.10956883467859E-16" ixz="2.22849693525031E-15" iyy="3.8713793085917E-11" iyz="2.93909858781952E-15" izz="1.00967486676306E-10"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename = "package://bumperbot_description/meshes/banh_mat_trau_hoan_chinh.STL"/>
+            </geometry>
+
+            <material name="green">
+                <color rgba="0 1 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <sphere radius="0.005"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="caster_rear_base_joint" type = "fixed">
+        <parent link = "base_link"/>
+        <child link = "caster_rear_link"/>
+        <origin rpy="0 0 0" xyz="-0.04755 0 -0.0275"/>
+    </joint>
+    <!--______________________________________________________________________________________________-->
+    <!--Khai bao khớp và link cho cảm biến IMU-->
+    <link name = "imu_link">
+        <inertial>
+
+        <origin xyz="-0.00552433659106688 0.000168210391520346 0.000514000497342681" rpy="0 0 0" />
+
+        <mass value="0.000528415362211671" />
+
+        <inertia  ixx="1.46176048428261E-08" ixy="1.40015117949421E-10" ixz="-1.99633872937403E-12"
+
+                iyy="8.59662482954888E-09" iyz="7.52375112767959E-12"
+
+                izz="2.30279421279312E-08" />
+
+        </inertial>
+
+        <visual>
+            <origin xyz = "0 0 0" rpy = "0 0 0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/IMU.STL" scale = "0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green">
+                <color rgba="0.5 0.6 0.7 1"/>
+            </material>
+
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename = "package://bumperbot_description/meshes/imu_link.STL" scale = "0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="imu_base_joint" type = "fixed">
+        <parent link = "base_link"/>
+        <child link = "imu_link"/>
+        <origin xyz="0 0 0.07" rpy="0 0 0"/>
+        <axis xyz="0 0 0"/>
+    </joint>

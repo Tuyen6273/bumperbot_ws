@@ -1,0 +1,21 @@
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'wheel_radius':
+        no description given
+        (default: '0.034')
+
+    'wheel_separation':
+        no description given
+        (default: '0.2565')
+
+    'deadzone_joystick':
+        no description given
+        (default: '0.2')
+
+    'max_linear_speed':
+        no description given
+        (default: '0.8')
+
+    'max_angular_speed':
+        no description given
+        (default: '0.8')

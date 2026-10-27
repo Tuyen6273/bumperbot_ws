@@ -1,0 +1,126 @@
+[
+  {
+    "file": "src/bumperbot_msgs/package.xml",
+    "reason": "Sửa tên dependency có sẵn bị sai; chặn rosdep trên máy mới."
+  },
+  {
+    "file": "src/bumberbot_py_examples/package.xml",
+    "reason": "Dùng đúng rosdep key cho pygame Python 3."
+  },
+  {
+    "file": "src/bumperbot_description/package.xml",
+    "reason": "Sửa tên package bridge bị sai."
+  },
+  {
+    "file": "src/bumberbot_py_examples/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_bringup/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_controller/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_description/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_firmware/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_localization/package.xml",
+    "reason": "Khai báo dependency thực sự được import/chạy để rosdep cài đủ trên máy mới."
+  },
+  {
+    "file": "src/bumperbot_controller/launch/controller.launch.py",
+    "reason": "Jazzy: tìm đường dẫn YAML cho spawner."
+  },
+  {
+    "file": "src/bumperbot_controller/launch/controller.launch.py",
+    "reason": "Jazzy: controller không kế thừa global arguments của manager."
+  },
+  {
+    "file": "src/bumperbot_controller/launch/controller.launch.py",
+    "reason": "Jazzy: truyền YAML trực tiếp cho từng spawner."
+  },
+  {
+    "file": "src/bumberbot_py_examples/launch/controller_joystick.launch.py",
+    "reason": "Jazzy: tìm đường dẫn YAML cho spawner."
+  },
+  {
+    "file": "src/bumberbot_py_examples/launch/controller_joystick.launch.py",
+    "reason": "Jazzy: controller không kế thừa global arguments của manager."
+  },
+  {
+    "file": "src/bumberbot_py_examples/launch/controller_joystick.launch.py",
+    "reason": "Jazzy: truyền YAML trực tiếp cho từng spawner."
+  },
+  {
+    "file": "src/bumperbot_firmware/launch/hardware_interface.launch.py",
+    "reason": "Jazzy: manager nhận URDF qua topic; robot thật ghi đè use_sim_time sau YAML."
+  },
+  {
+    "file": "src/bumperbot_firmware/CMakeLists.txt",
+    "reason": "Theo lựa chọn người dùng: build driver serial/encoder hiện có thay vì bản stub."
+  },
+  {
+    "file": "src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp",
+    "reason": "Bổ sung header trực tiếp cho các hàm đã có trong driver được chọn."
+  },
+  {
+    "file": "src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp",
+    "reason": "Lỗi gốc: reserve không tạo phần tử; phải có vùng nhớ hợp lệ trước export interfaces."
+  },
+  {
+    "file": "src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp",
+    "reason": "Lỗi gốc: reserve không tạo phần tử; phải có vùng nhớ hợp lệ trước export interfaces."
+  },
+  {
+    "file": "src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp",
+    "reason": "Lỗi gốc: reserve không tạo phần tử; phải có vùng nhớ hợp lệ trước export interfaces."
+  },
+  {
+    "file": "src/bumperbot_firmware/include/bumperbot_firmware/bumperbot_interface.cpp",
+    "reason": "Lỗi gốc: on_deactivate thiếu return khi thành công."
+  },
+  {
+    "file": "src/bumperbot_bringup/launch/real_robot.launch.py",
+    "reason": "Lỗi gốc: IMU đã được khởi động bởi hardware launch; tránh chạy hai driver cùng I2C."
+  },
+  {
+    "file": "src/bumperbot_bringup/launch/real_robot.launch.py",
+    "reason": "Bỏ IMU trùng; vẫn giữ một driver trong hardware launch."
+  },
+  {
+    "file": "src/bumperbot_description/urdf/bumperbot_gazebo.urdf.xacro",
+    "reason": "Jazzy/Harmonic: đúng tên thư viện plugin (dấu gạch ngang)."
+  },
+  {
+    "file": "src/bumperbot_description/launch/gazebo.launch.py",
+    "reason": "Harmonic đọc biến môi trường này để tìm mesh/model."
+  },
+  {
+    "file": "src/bumperbot_description/launch/gazebo.launch.py",
+    "reason": "Đồng bộ timestamp của robot_state_publisher với mô phỏng."
+  },
+  {
+    "file": "src/bumperbot_description/launch/gazebo.launch.py",
+    "reason": "Mô phỏng: cấp clock cho các node dùng use_sim_time."
+  },
+  {
+    "file": "src/bumperbot_bringup/launch/simulated_robot.launch.py",
+    "reason": "Đồng bộ clock của các node launch cùng mô phỏng."
+  },
+  {
+    "file": "src/bumperbot_bringup/launch/simulated_robot.launch.py",
+    "reason": "Joystick và các controller Python dùng chung thời gian Gazebo."
+  },
+  {
+    "file": "src/bumperbot_serial/package.xml",
+    "reason": "Lỗi gốc: ament_python là build_type, không phải dependency rosdep; giữ export/build_type, bỏ buildtool_depend không tồn tại."
+  }
+]

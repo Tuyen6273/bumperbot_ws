@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+
+
+<robot name="bumperbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo reference="wheel_right_link">
+        <!-- Ma sat huu han; do cung/giam chan cung muc voi caster.
+             Viec ap dung kp/kd phu thuoc engine vat ly. -->
+        <mu1>1.0</mu1> <!--Hệ số ma sát theo 2 hướng chuyển động chính-->
+        <mu2>1.0</mu2>
+        <kp>1000000.0</kp><!--Độ cứng tiếp xúc khi va chạm-->
+        <kd>100.0</kd><!--độ giảm chấn khi va chạm-->
+        <minDepth>0.001</minDepth> <!--Độ lún nhỏ nhất khi gazebo tính va chạm-->
+        <maxVel>0.1</maxVel><!--Vận tốc hiệu chính tối đa khi robot xử lý va chạm-->
+        <fdir1>1 0 0</fdir1><!--Hướng ma sát chính của bánh xe, 1 0 0 nghĩa là hướng ma sát chính là hướng trục x-->
+    </gazebo>
+
+    <gazebo reference="wheel_left_link">
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>0.1</maxVel>
+        <fdir1>1 0 0</fdir1>
+    </gazebo>
+
+    <gazebo reference="caster_front_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>0.1</maxVel>
+    </gazebo>
+
+    <gazebo reference="caster_rear_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>0.1</maxVel>
+    </gazebo>
+    <!--Plugin nay duoc nap cho toan bo robot-->
+    <gazebo>
+        <xacro:if value="$(arg is_ignition)">
+            <plugin
+                filename="ign_ros2_control-system"
+                name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find bumperbot_controller)/config/bumperbot_controllers.yaml</parameters>
+            </plugin>
+            <plugin filename = "ignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu">
+            </plugin>
+        </xacro:if>
+
+        <xacro:unless value="$(arg is_ignition)">
+            <plugin
+                filename = "gz_ros2_control-system"
+                name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find bumperbot_controller)/config/bumperbot_controllers.yaml</parameters>
+            </plugin>
+            <plugin filename = "gz-sim-imu-system" name ="gz::sim::systems::Imu">
+            </plugin>
+        </xacro:unless>
+    </gazebo>
+
+    <gazebo reference="imu_link">
+        <sensor name="imu" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <gz_frame_id>imu_link</gz_frame_id>
+        <topic>imu</topic>
+        <imu>
+            <angular_velocity>
+                <x>
+                    <noise type="gaussian">
+                        <mean>0.0</mean> 
+                        <stddev>2e-4</stddev>
+                    </noise>
+                </x>
+                <y>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>2e-4</stddev>
+                    </noise>
+                </y>
+                <z>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>2e-4</stddev>
+                    </noise>
+                </z>
+            </angular_velocity>
+            <linear_acceleration>
+                <x>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>1.7e-2</stddev>
+                    </noise>
+                </x>
+                <y>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>1.7e-2</stddev>
+                    </noise>
+                </y>
+                <z>
+                    <noise type="gaussian">
+                        <mean>0.0</mean>
+                        <stddev>1.7e-2</stddev>
+                    </noise>
+                </z>
+            </linear_acceleration>
+        </imu>
+        </sensor>
+    </gazebo>
+
+    <!--The nay duoc tao ra de kiem tra dieuf kien, neu is_ignition = true thi nap 
+    plugin nay name="ign_ros2_control::IgnitionRos2ControlPlugin" và is_ignition = false thì sẽ nạp
+    plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin"-->
+    
+</robot>

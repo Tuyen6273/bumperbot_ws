@@ -1,0 +1,38 @@
+joystick:
+  ros__parameters:
+    device_id: 0
+    device_name: ""
+    deadzone: 0.5
+    autorepeat_rate: 20.0
+    sticky_buttons: false
+    coalesce_interval_ms: 1
+
+# device_name (kiểu string, mặc định: "")
+# Tên của joystick muốn sử dụng.
+# Tham số này hữu ích khi có nhiều loại joystick khác nhau được kết nối.
+# Nếu chỉ định cả device_name và device_id, thì device_name sẽ được ưu tiên.
+# deadzone (kiểu double, mặc định: 0.05)
+# Xác định joystick phải di chuyển khỏi vị trí trung tâm bao nhiêu thì mới được xem là có tín hiệu.
+# Giá trị của trục joystick được chuẩn hóa trong khoảng từ -1 đến 1.
+# Ví dụ, deadzone = 0.1 nghĩa là joystick phải di chuyển ít nhất 10% hành trình về phía biên thì trục mới xuất ra giá trị khác 0.
+# Tham số này giúp loại bỏ nhiễu hoặc độ lệch nhỏ khi joystick đang ở gần vị trí trung tâm.
+# autorepeat_rate (kiểu double, mặc định: 20.0)
+# Tần số, tính bằng Hz, mà joystick gửi lại trạng thái trước đó khi trạng thái không thay đổi.
+# Mặc định 20.0 nghĩa là node gửi lại message 20 lần mỗi giây.
+# Nếu đặt thành 0.0, chức năng tự động gửi lại sẽ bị tắt. Khi đó, message Joy chỉ được publish khi trạng thái joystick thay đổi.
+# Giá trị không được lớn hơn 1000.0 Hz.
+# sticky_buttons (kiểu bool, mặc định: false)
+# Xác định các nút có hoạt động theo chế độ bật/tắt hay không.
+# Khi false:
+# Nhấn nút → xuất giá trị 1.
+# Thả nút → xuất giá trị 0.
+# Khi true:
+# Mỗi lần nhấn nút sẽ đảo trạng thái hiện tại.
+# Nếu đang là 0, nhấn nút sẽ chuyển sang 1 và giữ nguyên.
+# Nhấn lần nữa sẽ chuyển từ 1 về 0.
+# Việc thả nút không làm thay đổi trạng thái.
+# coalesce_interval_ms (kiểu int, mặc định: 1)
+# Số mili giây node chờ sau một sự kiện thay đổi trục trước khi publish message.
+# Kernel có thể tạo một sự kiện cho mỗi thay đổi rất nhỏ của joystick. Việc chờ và gộp các sự kiện này giúp giảm đáng kể số lượng message được publish.
+# Đặt thành 0 sẽ tắt chức năng gộp sự kiện.
+# Giá trị mặc định 1 ms là sự cân bằng hợp lý giữa độ trễ và số lượng message được gửi.

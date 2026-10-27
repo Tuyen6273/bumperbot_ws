@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-14",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/python.yaml",
+      "sha256": "d460fe37368967f16f8a9fec79727518c0ed3bc027cc51426ff25aaa5458217f"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml",
+      "sha256": "e012a515f673a1c78d801552e4b8863a5eb0bf6fd698e08263df709f8da09497"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ros/rosdistro/master/jazzy/distribution.yaml",
+      "sha256": "87dad9eaf9a3a7b9e120028366b1043101b1ddc5ccde634896e7d87c76137b70"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ros-teleop/teleop_tools/master/joy_teleop/joy_teleop/joy_teleop.py",
+      "sha256": "2a93d24b050fc6a7114efc9acc20822e6e96bdaa20da33fb77d7420ebeb7d8e6"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ros-controls/gz_ros2_control/jazzy/gz_ros2_control/src/gz_ros2_control_plugin.cpp",
+      "sha256": "9fd40cc3a6a0ba16b12081eea63b3735c930071d1e414606142bb967dc7b9557"
+    }
+  ]
+}
